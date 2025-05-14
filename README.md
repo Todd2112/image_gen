@@ -1,6 +1,6 @@
 # Pixar-Style Scene Generator
 
-This is a lightweight, proof-of-concept Streamlit app that demonstrates consistent character rendering using pre-generated Pixar-style illustrations of Lily across multiple scenes.
+This is a lightweight, proof-of-concept Streamlit app that demonstrates consistent character rendering using pre-generated Pixar-style illustrations across multiple scenes.
 
 ## 🧠 What It Does
 - Symbolic photo upload
