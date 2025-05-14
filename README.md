@@ -11,4 +11,5 @@ This is a lightweight, proof-of-concept Streamlit app that demonstrates consiste
 ## ✅ Tech
 - Streamlit
 - Pre-rendered images (DreamBooth fine-tuned offline)
+- Stable Diffusion and ControlNet used to render Pixar-like images
 - No live model inference required
