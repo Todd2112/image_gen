@@ -1,15 +1,36 @@
-# Pixar-Style Scene Generator
+# 🎬 Pixar-Style Scene Generator
 
-This is a lightweight, proof-of-concept Streamlit app that demonstrates consistent character rendering using pre-generated Pixar-style illustrations across multiple scenes.
+A lightweight, proof-of-concept Streamlit app that demonstrates consistent character rendering across multiple Pixar-style scenes using pre-generated images.
+
+---
 
 ## 🧠 What It Does
-- Symbolic photo upload
-- Choose from pre-rendered scenes (battle mage, soccer, backyard, etc.)
-- See consistent illustrations in a Pixar-style aesthetic
-- Clean UI with scene preview and image download
 
-## ✅ Tech
-- Streamlit
-- Pre-rendered images (DreamBooth fine-tuned offline)
-- Stable Diffusion and ControlNet used to render Pixar-like images
-- No live model inference required
+- 📤 Symbolic photo upload (no live training or customization)
+- 🎨 Choose from pre-rendered scenes:
+  - Battle Mage
+  - Soccer
+  - Warrior Pose
+  - More coming soon...
+- 🖼️ View consistent 3D cartoon-style illustrations with expressive character design
+- 📥 Download the selected image with one click
+
+---
+
+## 🧪 Tech Stack
+
+- **Streamlit** – clean, minimal frontend UI
+- **DreamBooth + Stable Diffusion 1.5** – used offline to generate all images
+- **ControlNet** – used to lock pose and structure
+- **Pre-generated Images Only** – no runtime inference or model hosting required
+
+---
+
+## 🚀 Deployment Notes
+
+This project is designed for Hugging Face Spaces or Streamlit Cloud.  
+Runtime requirements are minimal:
+
+```txt
+streamlit
+Pillow
