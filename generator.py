@@ -10,8 +10,8 @@ scene_images = {
     "Warrior Pose (Good)": "lily_warrior_good.png"
 }
 
-st.set_page_config(page_title="Lily Pixar Scene Generator", layout="centered")
-st.title("🎬 Lily Pixar-Style Scene Generator")
+st.set_page_config(page_title="Pixar Scene Generator", layout="centered")
+st.title("🎬 Pixar-Style Scene Generator")
 st.write("Upload a symbolic photo of Lily and choose a scene to preview a Pixar-style illustration.")
 
 # ===== Upload Image Placeholder =====
