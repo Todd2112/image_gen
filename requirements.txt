@@ -1,3 +1,2 @@
-streamlit
-pillow
-
+gradio==4.15.0
+Pillow
