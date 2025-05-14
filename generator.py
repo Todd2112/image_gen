@@ -1,58 +1,64 @@
 import streamlit as st
+from PIL import Image
 from diffusers import StableDiffusionPipeline
 import torch
-from PIL import Image
-import io
+import os
 
-# Load the model from Hugging Face Hub
+# Set up file paths
+model_path = "model/lily_model_output"  # Adjust path if necessary
+output_dir = "generated_images"
+os.makedirs(output_dir, exist_ok=True)
+
+# Load model (simplified version, reduced complexity)
 @st.cache_resource
 def load_model():
-    model_id = "your-username/lily-model"  # <-- Replace with your actual model repo ID
-    pipe = StableDiffusionPipeline.from_pretrained(
-        model_id,
-        torch_dtype=torch.float32
-    )
-    pipe = pipe.to("cuda" if torch.cuda.is_available() else "cpu")
-    return pipe
-
-# Generate the image
-def generate_image(pipe, prompt, num_steps, guidance_scale):
-    result = pipe(
-        prompt,
-        num_inference_steps=num_steps,
-        guidance_scale=guidance_scale,
-        height=512,
-        width=512
-    )
-    return result.images[0]
-
-# UI Layout
-st.title("🎨 Lily Pixar-Style Image Generator")
-
-prompt = st.text_area("Prompt", 
-    "Pixar-style image of Lily playing in a sunny backyard. Light reddish-blonde hair, large expressive eyes, "
-    "symmetrical face, cheerful expression. Blue overalls, red shirt, cartoon grass and flowers, wooden fence. "
-    "Warm lighting, bright colors, 3D cartoon style with whimsical proportions.")
-
-num_steps = st.slider("Inference Steps", 1, 50, 30)
-guidance_scale = st.slider("Guidance Scale", 1.0, 20.0, 7.5)
-
-pipe = load_model()
-
-if st.button("Generate Image"):
-    with st.spinner("🧠 Thinking..."):
-        image = generate_image(pipe, prompt, num_steps, guidance_scale)
-        st.image(image, caption="Generated Image", use_column_width=True)
-
-        # Convert image to in-memory byte stream
-        img_bytes = io.BytesIO()
-        image.save(img_bytes, format="PNG")
-        img_bytes.seek(0)
-
-        # Download button
-        st.download_button(
-            label="📥 Download Image",
-            data=img_bytes,
-            file_name="lily_pixar.png",
-            mime="image/png"
+    try:
+        pipe = StableDiffusionPipeline.from_pretrained(
+            model_path,
+            torch_dtype=torch.float32
         )
+        pipe = pipe.to("cuda" if torch.cuda.is_available() else "cpu")
+        return pipe
+    except Exception as e:
+        st.error(f"Error loading model: {e}")
+        return None
+
+# Image generation function
+def generate_image(pipe, uploaded_image):
+    prompt = "Pixar-style cartoon of Lily with large expressive eyes, symmetrical face, and cheerful smile."
+    try:
+        result = pipe(
+            prompt=prompt,
+            num_inference_steps=20,
+            guidance_scale=7.5,
+            height=768,
+            width=768
+        )
+        img = result.images[0]
+        return img
+    except Exception as e:
+        st.error(f"Error generating image: {e}")
+        return None
+
+# Streamlit UI
+def main():
+    st.title("Lily Pixar-Style Image Generator")
+    st.write("Upload a photo of Lily and generate a Pixar-style cartoon.")
+
+    uploaded_image = st.file_uploader("Upload Image", type=["jpg", "png", "jpeg"])
+
+    if uploaded_image:
+        st.image(uploaded_image, caption="Uploaded Image", use_column_width=True)
+
+        if st.button("Generate Pixar-Style Image"):
+            pipe = load_model()
+            if pipe:
+                generated_image = generate_image(pipe, uploaded_image)
+                if generated_image:
+                    generated_image_path = os.path.join(output_dir, "generated_lily.png")
+                    generated_image.save(generated_image_path)
+                    st.image(generated_image, caption="Generated Pixar-style Image", use_column_width=True)
+                    st.download_button(label="Download Image", data=generated_image_path, file_name="lily_pixar.png")
+
+if __name__ == "__main__":
+    main()
