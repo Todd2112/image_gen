@@ -4,18 +4,18 @@ import os
 
 # ===== Static Scene Mapping =====
 scene_images = {
-    "Battle Mage (Final Scene)": "lily_scene_battle_mage.png",
-    "Soccer (Best Shot)": "lily_best_soccer.png",
-    "Soccer (Okay/Not Great)": "lily_soccer_okay_not_great.jpg",
-    "Warrior Pose (Good)": "lily_warrior_good.png"
+    "Battle Mage": "lily_scene_battle_mage.png",
+    "Soccer": "lily_best_soccer.png",
+    "Soccer": "lily_soccer_okay_not_great.jpg",
+    "Warrior Pose": "lily_warrior_good.png"
 }
 
 st.set_page_config(page_title="Pixar Scene Generator", layout="centered")
 st.title("🎬 Pixar-Style Scene Generator")
-st.write("Upload a symbolic photo of Lily and choose a scene to preview a Pixar-style illustration.")
+st.write("Upload a symbolic photo and choose a scene to preview a Pixar-style illustration.")
 
 # ===== Upload Image Placeholder =====
-uploaded_file = st.file_uploader("📤 Upload a photo of Lily (symbolic only)", type=["jpg", "jpeg", "png"])
+uploaded_file = st.file_uploader("📤 Upload a photo (symbolic only)", type=["jpg", "jpeg", "png"])
 if uploaded_file:
     st.image(uploaded_file, caption="Uploaded Photo", use_column_width=True)
 
