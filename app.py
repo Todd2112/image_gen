@@ -1,43 +1,39 @@
-import gradio as gr
+import streamlit as st
 from PIL import Image
 import os
 
-# ===== Static Scene Mapping =====
+# ===== Scene Mapping (Root-Level Files) =====
 scene_images = {
     "Battle Mage": "lily_scene_battle_mage.png",
-    "Soccer": "lily_best_soccer.png",  # Remove duplicate keys
+    "Soccer (Best)": "lily_best_soccer.png",
+    "Soccer (Okay)": "lily_soccer_okay_not_great.jpg",
     "Warrior Pose": "lily_warrior_good.png"
 }
 
-def generate_scene(uploaded_image, scene):
-    if not uploaded_image:
-        return None, "❌ No uploaded image provided."
+# ===== UI Config =====
+st.set_page_config(page_title="Pixar Scene Generator", layout="centered")
+st.title("🎬 Pixar-Style Scene Generator")
+st.write("Upload a symbolic photo and choose a scene to preview a Pixar-style illustration.")
 
+# ===== Image Upload =====
+uploaded_image = st.file_uploader("📤 Upload a symbolic photo", type=["jpg", "jpeg", "png"])
+if uploaded_image:
+    st.image(uploaded_image, caption="Uploaded Photo", use_column_width=True)
+
+# ===== Scene Selector =====
+scene = st.selectbox("🎨 Choose a Scene", list(scene_images.keys()))
+
+# ===== Generate Button =====
+if st.button("✨ Generate Scene"):
     image_filename = scene_images.get(scene)
-    image_path = os.path.join("static", image_filename)
+    image_path = image_filename  # root folder
+
+    st.write(f"🔍 Looking for: `{image_filename}`")
 
     if os.path.exists(image_path):
         preview_image = Image.open(image_path)
-        return preview_image, f"✅ Scene: {scene}"
+        st.image(preview_image, caption=f"{scene}", use_column_width=True)
+        with open(image_path, "rb") as f:
+            st.download_button("📥 Download Image", f, file_name=image_filename)
     else:
-        return None, "❌ Scene image not found in 'static/' directory."
-
-# ===== Gradio Interface =====
-scene_choices = list(scene_images.keys())
-
-demo = gr.Interface(
-    fn=generate_scene,
-    inputs=[
-        gr.Image(type="pil", label="📤 Upload a symbolic photo"),
-        gr.Dropdown(choices=scene_choices, label="🎨 Choose a Scene")
-    ],
-    outputs=[
-        gr.Image(type="pil", label="🎬 Generated Scene"),
-        gr.Textbox(label="ℹ️ Status")
-    ],
-    title="Pixar-Style Scene Generator",
-    description="Upload a symbolic photo and choose a scene to preview a Pixar-style illustration."
-)
-
-if __name__ == "__main__":
-    demo.launch()
+        st.error("❌ Could not find the image in the project directory.")
